@@ -101,13 +101,11 @@ function quickParse(text: string) {
 
 // Modo IA (opcional) para estructurar bonito con contexto
 async function llmStructurize(text: string) {
-  if (!process.env.XAI_API_KEY) return null
+  if (!process.env.OPENAI_API_KEY) return null
 
   try {
     const result = await generateText({
-      model: xai("grok-4", {
-        apiKey: process.env.XAI_API_KEY,
-      }),
+      model: openai("gpt-4o"),
       system:
         "Eres un experto extractor de currículums que devuelve únicamente JSON válido según el esquema solicitado. Analiza el texto del currículum y extrae la información de manera precisa y estructurada.",
       prompt: `Extrae la información del siguiente currículum y devuelve ÚNICAMENTE un JSON válido con este esquema exacto:
@@ -148,7 +146,7 @@ Responde ÚNICAMENTE con el JSON, sin explicaciones adicionales.`,
       }
     }
   } catch (e) {
-    console.error("Grok structurize error:", e)
+    console.error("OpenAI structurize error:", e)
   }
 
   return null
